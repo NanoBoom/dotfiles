@@ -167,6 +167,8 @@ export PATH
 # ------------------
 # Alias
 # ------------------
+zsh-defer alias icat="kitten icat"
+zsh-defer alias ssh="kitten ssh"
 zsh-defer alias vim=nvim
 zsh-defer alias vi=nvim
 if [[ $(uname) == "Linux" ]]; then
@@ -190,8 +192,6 @@ else
   fi
 fi
 
-# vfox load
-zsh-defer eval "$(vfox activate zsh)"
 
 # java load
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -200,3 +200,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 if [[ "$PROFILE_STARTUP" == true ]]; then
   zprof
 fi
+
+
+# vfox load
+zsh-defer eval "$(vfox activate zsh)"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
