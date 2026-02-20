@@ -187,6 +187,12 @@ fi
 # My Custom Config
 # ------------------
 
+# Zsh 自带钩子：每次终端准备打印 prompt 提示符（准备让你输入下一条命令）前，执行该函数
+precmd() {
+  # 强制切换为英文 ABC
+  macism com.apple.keylayout.ABC
+}
+
 # zoxide load
 if [[ -f ~/.zoxide_init.zsh ]]; then
   # 静态配置文件存在，直接加载
@@ -205,3 +211,4 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
 # rust load
 . "$HOME/.cargo/env"
+
