@@ -3,99 +3,107 @@
 #
 # :help provider-clipboard
 
-: ${COPY_PROVIDERS:=osc52 pb wl xclip win32yank tmux local}
-: ${PASTE_PROVIDERS:=pb wl xclip win32yank tmux local}
+: ${COPY_PROVIDERS:=pb kitty wl xclip win32yank tmux osc52 local}
+: ${PASTE_PROVIDERS:=pb kitty wl xclip win32yank tmux local}
 : ${TTY:=$( (tty || tmux display-message -p '#{pane_tty}') 2>/dev/null | grep /dev/)}
 LOCAL_STORAGE=$HOME/.clipboard-provider.out
 
-# 检测 base64 参数兼容性
 detect_base64() {
-	if base64 --help 2>&1 | grep -q -- '-w'; then
-		BASE64_ENCODE="base64 -w 0"
-		BASE64_DECODE="base64 -d"
-	elif base64 --help 2>&1 | grep -q -- '-b'; then
-		BASE64_ENCODE="base64 -b 0"
-		BASE64_DECODE="base64 -D"
-	else
-		BASE64_ENCODE="base64"
-		BASE64_DECODE="base64 -d"
-	fi
+  if base64 --help 2>&1 | grep -q -- '-w'; then
+    BASE64_ENCODE="base64 -w 0"
+    BASE64_DECODE="base64 -d"
+  elif base64 --help 2>&1 | grep -q -- '-b'; then
+    BASE64_ENCODE="base64 -b 0"
+    BASE64_DECODE="base64 -D"
+  else
+    BASE64_ENCODE="base64"
+    BASE64_DECODE="base64 -d"
+  fi
 }
 detect_base64
 
 main() {
-	declare buffer status=1
-	case $1 in
-	copy)
-		buffer=$($BASE64_ENCODE | tr -d '\n')
-		for p in $COPY_PROVIDERS; do
-			internal | $p-provider copy && status=0
-		done
-		;;
-	paste)
-		for p in $PASTE_PROVIDERS; do
-			$p-provider paste && status=0 && break
-		done
-		;;
-	esac
-	exit $status
+  declare buffer status=1
+  case $1 in
+  copy)
+    buffer=$($BASE64_ENCODE | tr -d '\n')
+    for p in $COPY_PROVIDERS; do
+      internal | $p-provider copy && status=0
+    done
+    ;;
+  paste)
+    for p in $PASTE_PROVIDERS; do
+      $p-provider paste && status=0 && break
+    done
+    ;;
+  esac
+  exit $status
 }
 
 internal() { $BASE64_DECODE <<<"$buffer"; }
 
 tmux-provider() {
-	[[ -n $TMUX ]] || return 1
-	case $1 in
-	copy) internal | tmux load-buffer - ;;
-	paste) tmux save-buffer - ;;
-	esac
+  [[ -n $TMUX ]] || return 1
+  case $1 in
+  copy) internal | tmux load-buffer - ;;
+  paste) tmux save-buffer - ;;
+  esac
 }
 
 pb-provider() {
-	command -v pbcopy &>/dev/null || return 1
-	case $1 in
-	copy) internal | pbcopy ;;
-	paste) pbpaste ;;
-	esac
+  command -v pbcopy &>/dev/null || return 1
+  case $1 in
+  copy) internal | pbcopy ;;
+  paste) pbpaste ;;
+  esac
+}
+
+kitty-provider() {
+  # KITTY_WINDOW_ID 在 tmux 中也会保留
+  [[ -n "$KITTY_WINDOW_ID" ]] || return 1
+  case $1 in
+  copy) internal | kitten clipboard ;;
+  paste) kitten clipboard -g ;;
+  esac
 }
 
 osc52-provider() {
-	[[ -n "$TTY" ]] || return 1
-	case $1 in
-	copy) printf $'\e]52;c;%s\a' "$buffer" >"$TTY" ;;
-	paste) return 1 ;;
-	esac
+  [[ -n "$TTY" ]] || return 1
+  case $1 in
+  copy) printf $'\e]52;c;%s\a' "$buffer" >"$TTY" ;;
+  paste) return 1 ;;
+  esac
 }
 
 local-provider() {
-	case $1 in
-	copy) internal >$LOCAL_STORAGE ;;
-	paste) cat $LOCAL_STORAGE && return 0 ;;
-	esac
+  case $1 in
+  copy) internal >$LOCAL_STORAGE ;;
+  paste) cat $LOCAL_STORAGE && return 0 ;;
+  esac
 }
 
 xclip-provider() {
-	command -v xclip &>/dev/null || return 1
-	case $1 in
-	copy) internal | xclip -i -selection clipboard ;;
-	paste) xclip -o -selection clipboard ;;
-	esac
+  command -v xclip &>/dev/null || return 1
+  case $1 in
+  copy) internal | xclip -i -selection clipboard ;;
+  paste) xclip -o -selection clipboard ;;
+  esac
 }
 
 wl-provider() {
-	command -v wl-copy &>/dev/null || return 1
-	case $1 in
-	copy) internal | wl-copy ;;
-	paste) wl-paste ;;
-	esac
+  command -v wl-copy &>/dev/null || return 1
+  case $1 in
+  copy) internal | wl-copy ;;
+  paste) wl-paste ;;
+  esac
 }
 
 win32yank-provider() {
-	command -v win32yank.exe &>/dev/null || return 1
-	case $1 in
-	copy) internal | win32yank.exe -i --crlf ;;
-	paste) win32yank.exe -o --lf ;;
-	esac
+  command -v win32yank.exe &>/dev/null || return 1
+  case $1 in
+  copy) internal | win32yank.exe -i --crlf ;;
+  paste) win32yank.exe -o --lf ;;
+  esac
 }
 
 main "$@"

@@ -78,3 +78,5 @@ zmodule https://github.com/doodleEsc/gitster.git
 zmodule romkatv/zsh-defer -d
 # python virtualenv autoswitch
 zmodule MichaelAquilina/zsh-autoswitch-virtualenv -n autoswitch_virtualenv
+# environment variables manager
+zmodule NanoBoom/zem

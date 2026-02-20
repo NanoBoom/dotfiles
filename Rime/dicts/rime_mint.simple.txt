@@ -1,0 +1,26 @@
+# Rime table
+# coding: utf-8
+#@/db_name	rime_mint.simple.txt
+#@/db_type	tabledb
+#
+#
+# 此行之后不能写注释
+/feature-dev:feature-dev	fdev	1
+/prp-core:prp-prd	prd	1
+/prp-core:prp-plan	pl	1
+/prp-core:prp-pr	pr	1
+/prp-core:prp-debug	db	1
+/prp-core:prp-commit	ct	1
+/prp-core:prp-review	rev	2
+/prp-core:prp-review-agents	rev	1
+/prp-core:prp-implement	imp	1
+/prp-core:prp-issue-fix	iss	1
+/prp-core:prp-issue-investigate	iss	2
+/prp-core:prp-ralph	ral	2
+/prp-core:prp-ralph-cancel	ral	1
+/prp-core:prp-research-team	rst	1
+/prp-core:install	ins	1
+/prp-core:rule-update	ru	1
+/prp-core:prp-codebase-question	cq	1
+/prp-core:prp-create	cr	1
+/prp-core:prp-execute	ex	1

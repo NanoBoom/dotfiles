@@ -168,9 +168,16 @@ export PATH
 # Alias
 # ------------------
 zsh-defer alias icat="kitten icat"
-zsh-defer alias ssh="kitten ssh"
 zsh-defer alias vim=nvim
 zsh-defer alias vi=nvim
+# 智能判断 SSH Alias
+if [[ -n "$TMUX" ]]; then
+    # 如果在 Tmux 内部，直接使用原生 ssh
+    zsh-defer alias ssh="ssh"
+else
+    # 如果不在 Tmux 内部，使用 kitten ssh (利用其 terminfo 自动分发功能)
+    zsh-defer alias ssh="kitten ssh"
+fi
 if [[ $(uname) == "Linux" ]]; then
     zsh-defer alias open=xdg-open
 fi
@@ -192,16 +199,9 @@ else
   fi
 fi
 
-
-# java load
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && zsh-defer source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-if [[ "$PROFILE_STARTUP" == true ]]; then
-  zprof
-fi
-
-
 # vfox load
-zsh-defer eval "$(vfox activate zsh)"
+eval "$(vfox activate zsh)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# rust load
+. "$HOME/.cargo/env"
