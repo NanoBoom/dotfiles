@@ -208,33 +208,3 @@ fi
 # vfox load
 eval "$(vfox activate zsh)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
-# rust load
-. "$HOME/.cargo/env"
-
-# --- Claude Code 优化版 ---
-
-claude() {
-    # 1. 设置标志位 (仅对当前 Pane 生效)
-    tmux set-option -p @claude_active 1
-    
-    # 2. 只有当前是激活 pane 时才立即切中文（防止脚本后台启动干扰前台）
-    # 大部分时候你是前台启动，这里肯定会执行
-    if [ "$(tmux display-message -p '#{pane_active}')" = "1" ]; then
-        macism im.rime.inputmethod.Squirrel.Hans
-    fi
-
-    # 3. 运行主程序
-    command claude "$@"
-
-    # 4. 程序退出后的清理逻辑
-    
-    # 4.1 移除标志位
-    tmux set-option -p -u @claude_active
-    
-    # 4.2 【关键修改】检查当前 Pane 是否拥有焦点
-    # 如果 Claude 在后台结束（比如你切到了别的 Pane），不要修改当前的输入法
-    if [ "$(tmux display-message -p '#{pane_active}')" = "1" ]; then
-        macism com.apple.keylayout.ABC
-    fi
-}
