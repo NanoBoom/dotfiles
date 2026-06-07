@@ -5,22 +5,23 @@
 #
 #
 # 此行之后不能写注释
-/feature-dev:feature-dev	fdev	1
+/feature-dev:feature-dev	fd	1
 /prp-core:prp-prd	prd	1
 /prp-core:prp-plan	pl	1
 /prp-core:prp-pr	pr	1
-/prp-core:prp-debug	db	1
-/prp-core:prp-commit	ct	1
-/prp-core:prp-review	rev	2
-/prp-core:prp-review-agents	rev	1
-/prp-core:prp-implement	imp	1
-/prp-core:prp-issue-fix	iss	1
-/prp-core:prp-issue-investigate	iss	2
-/prp-core:prp-ralph	ral	2
-/prp-core:prp-ralph-cancel	ral	1
-/prp-core:prp-research-team	rst	1
-/prp-core:install	ins	1
+/prp-core:prp-debug	deb	1
+/prp-core:prp-commit	cm	1
+/prp-core:prp-review-agents	re	2
+/prp-core:prp-review	re	3
+/prp-core:prp-research-team	re	1
+/prp-core:prp-implement	im	1
+/prp-core:prp-issue-fix	fi	1
+/prp-core:prp-issue-investigate	is	2
+/prp-core:prp-ralph	ra	2
+/prp-core:prp-ralph-cancel	ra	1
+/prp-core:install	in	1
 /prp-core:rule-update	ru	1
-/prp-core:prp-codebase-question	cq	1
+/prp-core:prp-codebase-question	co	1
 /prp-core:prp-create	cr	1
 /prp-core:prp-execute	ex	1
+/clear	cl	1
