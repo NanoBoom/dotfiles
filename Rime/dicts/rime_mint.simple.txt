@@ -11,7 +11,7 @@
 /prp-core:prp-pr	pr	1
 /prp-core:prp-debug	deb	1
 /prp-core:prp-commit	cm	1
-/prp-core:prp-review-agents	re	2
+/prp-core:pr-review-agents	re	2
 /prp-core:prp-review	re	3
 /prp-core:prp-research-team	re	1
 /prp-core:prp-implement	im	1
