@@ -1,0 +1,133 @@
+# herdr 配置 —— 键位整体向 tmux 肌肉记忆对齐
+#
+# 绑定语法：
+#   "prefix+x"    需要先按前缀键（本文件为 ctrl+g）
+#   "ctrl+x"      直接快捷键，不经过前缀，会被所有 pane 拦截
+#   "prefix+1..9" 索引型绑定，仅 switch_tab / switch_workspace / focus_agent 支持
+#
+# 注意：TOML 里 [[keys.command]] 一旦出现，后面的裸键值对就属于该表了。
+#       所以 [keys] 的普通键必须全部写在第一个 [[keys.command]] 之前。
+#
+# 校验：herdr config check          默认值：herdr --default-config
+# 热加载：herdr server reload-config（或 prefix+r）
+
+onboarding = false
+
+[theme]
+name = "gruvbox"
+
+[ui]
+agent_panel_sort = "priority"
+copy_on_select = false
+
+sidebar_collapsed_mode = "compact"
+
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [
+  ["state_icon", { token = "tab", bold = true, fg = "#fbf1c7", dim = false}, { token = "workspace", bold = false, fg = "#928374" }],
+  ["agent"],
+]
+
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "top-right"
+
+[keys]
+# 前缀键 —— tmux: set -g prefix C-g
+prefix = "ctrl+g"
+
+# ── 全局 ────────────────────────────────────────────────
+reload_config = "prefix+r"                   # tmux: bind r source-file ~/.tmux.conf
+detach = "prefix+d"                          # tmux 默认: prefix d
+settings = "prefix+shift+s"                  # 让出 prefix+s 给 workspace 选择器
+
+# ── workspace（对应 tmux 的 session）───────────────────
+workspace_picker = "prefix+s"                # tmux: bind s choose-session
+new_workspace = "prefix+o"                   # tmux: bind o 新建并切换 session
+rename_workspace = "prefix+w"                # tmux 是 bind $，shift+4 与下面的 shift+1..9 冲突；借用 workspace_picker 让出的 prefix+w
+close_workspace = "prefix+ctrl+q"                   # tmux: bind C-q kill-session；直接键，会全局拦截 ctrl+q
+switch_workspace = "prefix+shift+1..9"
+previous_workspace = "cmd+p"         #
+next_workspace = "cmd+n"           #
+open_notification_target = "prefix+shift+o"  # 让出 prefix+o 给 new_workspace
+
+# ── tab（对应 tmux 的 window）──────────────────────────
+new_tab = "prefix+c"                         # tmux: bind c new-window
+rename_tab = "prefix+comma"                  # tmux 默认: prefix , rename-window
+close_tab = "prefix+shift+k"                 # tmux: bind k kill-window（prefix+k 是 herdr 默认的 focus_pane_up，故加 shift）
+previous_tab = "shift+left"                  # tmux: bind -n S-Left previous-window
+next_tab = "shift+right"                     # tmux: bind -n S-Right next-window
+switch_tab = "prefix+1..9"                   # tmux: prefix 1..9 select-window
+
+# ── pane ──────────────────────────────────────────────
+split_horizontal = "prefix+minus"            # tmux: bind - splitw -v（上下分屏）
+split_vertical = "prefix+backslash"          # tmux: bind \ splitw -h（左右分屏）
+close_pane = "prefix+x"                      # tmux: bind x kill-pane
+zoom = "prefix+space"                        # tmux: bind -r Space resize-pane -Z
+resize_mode = "prefix+shift+r"               # tmux: prefix + C-h/j/k/l 调整大小
+edit_scrollback = "prefix+esc"               # tmux: bind Escape copy-mode
+
+# ══════════════════════════════════════════════════════
+# 以下均为自定义命令绑定，必须位于 [keys] 普通键之后
+# ══════════════════════════════════════════════════════
+
+# ── pane 焦点移动 —— herdr-splits 插件，与 Neovim 分屏无缝互跳 ──
+# 对应 tmux 的 vim-tmux-navigator（bind -n C-h/j/k/l）
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "herdr-splits.nav-left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "herdr-splits.nav-down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "herdr-splits.nav-up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "herdr-splits.nav-right"
+
+# ── pane 尺寸调整 —— 同插件，无需进入 resize_mode ──
+[[keys.command]]
+key = "alt+h"
+type = "plugin_action"
+command = "herdr-splits.resize-left"
+
+[[keys.command]]
+key = "alt+j"
+type = "plugin_action"
+command = "herdr-splits.resize-down"
+
+[[keys.command]]
+key = "alt+k"
+type = "plugin_action"
+command = "herdr-splits.resize-up"
+
+[[keys.command]]
+key = "alt+l"
+type = "plugin_action"
+command = "herdr-splits.resize-right"
+
+# ── 交换 tab 顺序 —— herdr 无内置动作，脚本走 socket API 的 tab.move ──
+# tmux: bind -n M-Left  swap-window -t -1 \; select-window -t -1
+#       bind -n M-Right swap-window -t +1 \; select-window -t +1
+[[keys.command]]
+key = "alt+left"
+type = "shell"
+command = "bash /Users/fanlz/.config/herdr/scripts/herdr-swap-tab.sh left"
+
+[[keys.command]]
+key = "alt+right"
+type = "shell"
+command = "bash /Users/fanlz/.config/herdr/scripts/herdr-swap-tab.sh right"
