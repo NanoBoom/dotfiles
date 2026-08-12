@@ -5,14 +5,22 @@
 
 : ${COPY_PROVIDERS:=pb kitty wl xclip win32yank tmux osc52 local}
 : ${PASTE_PROVIDERS:=pb kitty wl xclip win32yank tmux local}
-: ${TTY:=$( (tty || tmux display-message -p '#{pane_tty}') 2>/dev/null | grep /dev/)}
 LOCAL_STORAGE=$HOME/.clipboard-provider.out
 
+# 只有真的轮到 osc52-provider 时才解析 tty。
+resolve_tty() {
+  [[ -n $TTY ]] && return 0
+  TTY=$( (tty || tmux display-message -p '#{pane_tty}') 2>/dev/null | grep /dev/)
+  [[ -n $TTY ]]
+}
+
 detect_base64() {
-  if base64 --help 2>&1 | grep -q -- '-w'; then
+  declare help
+  help=$(base64 --help 2>&1)
+  if [[ $help == *-w* ]]; then
     BASE64_ENCODE="base64 -w 0"
     BASE64_DECODE="base64 -d"
-  elif base64 --help 2>&1 | grep -q -- '-b'; then
+  elif [[ $help == *-b* ]]; then
     BASE64_ENCODE="base64 -b 0"
     BASE64_DECODE="base64 -D"
   else
@@ -20,15 +28,21 @@ detect_base64() {
     BASE64_DECODE="base64 -d"
   fi
 }
-detect_base64
 
 main() {
   declare buffer status=1
   case $1 in
   copy)
+    # paste 路径用不到 base64，别让它白付一次 base64 --help 的进程开销：
+    # yanky 的一次 p 会连着触发三次阻塞式 paste。
+    detect_base64
     buffer=$($BASE64_ENCODE | tr -d '\n')
+    # 第一个成功的 provider 就收工，和 paste 保持一致。以前这里没有 break，
+    # 每次 yank/delete 都要把 8 个 provider 全跑一遍（约 25 个进程），并且会
+    # 在 pbcopy 已经成功之后，继续让 kitten / osc52 往 TUI 正在渲染的 tty
+    # 里写转义序列。
     for p in $COPY_PROVIDERS; do
-      internal | $p-provider copy && status=0
+      internal | $p-provider copy && status=0 && break
     done
     ;;
   paste)
@@ -59,8 +73,13 @@ pb-provider() {
 }
 
 kitty-provider() {
-  # KITTY_WINDOW_ID 在 tmux 中也会保留
+  # KITTY_WINDOW_ID 在 tmux / herdr 等复用器中也会保留，但那时 /dev/tty 已经
+  # 是复用器的 pane pty，不是 kitty 本体。kitten clipboard 会先往 tty 写一整段
+  # 私有模式复位序列（关掉 2004 bracketed-paste 和 1000/1002/1003/1006 鼠标
+  # 跟踪），再靠 CSI?s / CSI?r 还原——herdr 不实现这两个序列，于是每敲一次
+  # yy/dd 就把 Neovim 打开的模式永久关掉，且与 Neovim 的输出争抢同一个 pty。
   [[ -n "$KITTY_WINDOW_ID" ]] || return 1
+  [[ -z "$TMUX" && -z "$HERDR_PANE_ID" && -z "$ZELLIJ" && -z "$STY" ]] || return 1
   case $1 in
   copy) internal | kitten clipboard ;;
   paste) kitten clipboard -g ;;
@@ -68,7 +87,7 @@ kitty-provider() {
 }
 
 osc52-provider() {
-  [[ -n "$TTY" ]] || return 1
+  resolve_tty || return 1
   case $1 in
   copy) printf $'\e]52;c;%s\a' "$buffer" >"$TTY" ;;
   paste) return 1 ;;
