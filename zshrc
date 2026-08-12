@@ -170,12 +170,14 @@ export PATH
 zsh-defer alias icat="kitten icat"
 zsh-defer alias vim=nvim
 zsh-defer alias vi=nvim
+zsh-defer alias ss="sgpt -s"
+zsh-defer alias claude='TZ="Asia/Singapore" claude'
 # 智能判断 SSH Alias
-if [[ -n "$TMUX" ]]; then
-    # 如果在 Tmux 内部，直接使用原生 ssh
+if [[ -n "$HERDR_PANE_ID" ]]; then
+    # 如果在 herdr 内部，直接使用原生 ssh
     zsh-defer alias ssh="ssh"
 else
-    # 如果不在 Tmux 内部，使用 kitten ssh (利用其 terminfo 自动分发功能)
+    # 如果不在 herdr 内部，使用 kitten ssh（利用其 terminfo 自动分发功能）
     zsh-defer alias ssh="kitten ssh"
 fi
 if [[ $(uname) == "Linux" ]]; then
@@ -208,3 +210,16 @@ fi
 # vfox load
 eval "$(vfox activate zsh)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+codex() {
+  export http_proxy="http://127.0.0.1:7890"
+  export https_proxy="http://127.0.0.1:7890"
+  export HTTP_PROXY="$http_proxy"
+  export HTTPS_PROXY="$https_proxy"
+
+  command codex \
+    --dangerously-bypass-approvals-and-sandbox \
+    "$@"
+}
+
+export PATH="$HOME/.local/bin:$PATH"
