@@ -1,4 +1,3 @@
-# herdr 配置 —— 键位整体向 tmux 肌肉记忆对齐
 #
 # 绑定语法：
 #   "prefix+x"    需要先按前缀键（本文件为 ctrl+g）
@@ -17,17 +16,24 @@ onboarding = false
 name = "gruvbox"
 
 [ui]
-agent_panel_sort = "priority"
+sidebar_width = 20
+agent_panel_sort = "spaces"
 copy_on_select = false
 
 sidebar_collapsed_mode = "compact"
 
 
 [ui.sidebar.agents]
-row_gap = 0
+row_gap = 1
 rows = [
   ["state_icon", { token = "tab", bold = true, fg = "#fbf1c7", dim = false}, { token = "workspace", bold = false, fg = "#928374" }],
   ["agent"],
+]
+
+[ui.sidebar.spaces]
+row_gap = 1
+rows = [
+  ["state_icon", "workspace"],
 ]
 
 [ui.toast]
@@ -55,6 +61,11 @@ switch_workspace = "prefix+shift+1..9"
 previous_workspace = "cmd+p"         #
 next_workspace = "cmd+n"           #
 open_notification_target = "prefix+shift+o"  # 让出 prefix+o 给 new_workspace
+
+# ── agent 面板导航（顺序跟随 ui.agent_panel_sort）──
+previous_agent = "alt+p"                     # 与 cmd+p/cmd+n 的 workspace 切换对称
+next_agent = "alt+n"                         # 跳到下一个待处理的 agent
+focus_agent = "prefix+alt+1..9"              # tab 用 prefix+1..9，workspace 用 prefix+shift+1..9
 
 # ── tab（对应 tmux 的 window）──────────────────────────
 new_tab = "prefix+c"                         # tmux: bind c new-window
