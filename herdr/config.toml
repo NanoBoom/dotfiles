@@ -136,9 +136,9 @@ command = "herdr-splits.resize-right"
 [[keys.command]]
 key = "alt+left"
 type = "shell"
-command = "bash /Users/fanlz/.config/herdr/scripts/herdr-swap-tab.sh left"
+command = "bash ~/.config/herdr/scripts/herdr-swap-tab.sh left"
 
 [[keys.command]]
 key = "alt+right"
 type = "shell"
-command = "bash /Users/fanlz/.config/herdr/scripts/herdr-swap-tab.sh right"
+command = "bash ~/.config/herdr/scripts/herdr-swap-tab.sh right"
