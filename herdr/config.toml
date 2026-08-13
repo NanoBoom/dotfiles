@@ -37,7 +37,7 @@ rows = [
 ]
 
 [ui.toast]
-delivery = "terminal"
+delivery = "system"
 delay_seconds = 1
 
 [ui.toast.herdr]
