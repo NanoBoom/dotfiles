@@ -54,23 +54,28 @@ settings = "prefix+shift+s"                  # 让出 prefix+s 给 workspace 选
 
 # ── workspace（对应 tmux 的 session）───────────────────
 workspace_picker = "prefix+s"                # tmux: bind s choose-session
-new_workspace = "prefix+o"                   # tmux: bind o 新建并切换 session
-rename_workspace = "prefix+w"                # tmux 是 bind $，shift+4 与下面的 shift+1..9 冲突；借用 workspace_picker 让出的 prefix+w
+new_workspace = "prefix+w"                   # tmux: bind o 新建并切换 session
+rename_workspace = "prefix+m"                # tmux 是 bind $，shift+4 与下面的 shift+1..9 冲突；借用 workspace_picker 让出的 prefix+w
 close_workspace = "prefix+ctrl+q"                   # tmux: bind C-q kill-session；直接键，会全局拦截 ctrl+q
 switch_workspace = "prefix+shift+1..9"
-previous_workspace = "cmd+p"         #
-next_workspace = "cmd+n"           #
+previous_workspace = "ctrl+cmd+p"         #
+next_workspace = "ctrl+cmd+n"           #
 open_notification_target = "prefix+shift+o"  # 让出 prefix+o 给 new_workspace
 
+# ── worktree ──────────────────────────────────────────
+new_worktree = "prefix+n"              # 从当前 workspace 创建 Git worktree（Herdr 默认）
+open_worktree = "prefix+o"               # 打开当前仓库已有的 Git worktree
+remove_worktree = "ctrl+alt+k"       # 删除选中的托管 worktree（会先确认）
+
 # ── agent 面板导航（顺序跟随 ui.agent_panel_sort）──
-previous_agent = "alt+p"                     # 与 cmd+p/cmd+n 的 workspace 切换对称
-next_agent = "alt+n"                         # 跳到下一个待处理的 agent
+previous_agent = "cmd+p"                     # 与 cmd+p/cmd+n 的 workspace 切换对称
+next_agent = "cmd+n"                         # 跳到下一个待处理的 agent
 focus_agent = "prefix+alt+1..9"              # tab 用 prefix+1..9，workspace 用 prefix+shift+1..9
 
 # ── tab（对应 tmux 的 window）──────────────────────────
 new_tab = "prefix+c"                         # tmux: bind c new-window
 rename_tab = "prefix+comma"                  # tmux 默认: prefix , rename-window
-close_tab = "prefix+shift+k"                 # tmux: bind k kill-window（prefix+k 是 herdr 默认的 focus_pane_up，故加 shift）
+close_tab = "ctrl+alt+n"                 # tmux: bind k kill-window（prefix+k 是 herdr 默认的 focus_pane_up，故加 shift）
 previous_tab = "shift+left"                  # tmux: bind -n S-Left previous-window
 next_tab = "shift+right"                     # tmux: bind -n S-Right next-window
 switch_tab = "prefix+1..9"                   # tmux: prefix 1..9 select-window
