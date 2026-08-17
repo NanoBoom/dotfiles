@@ -173,11 +173,11 @@ zsh-defer alias vi=nvim
 zsh-defer alias ss="sgpt -s"
 zsh-defer alias claude='TZ="Asia/Singapore" claude'
 # 智能判断 SSH Alias
-if [[ -n "$HERDR_PANE_ID" ]]; then
-    # 如果在 herdr 内部，直接使用原生 ssh
+if [[ -n "$TMUX" || -n "$HERDR_PANE_ID" ]]; then
+    # 如果在 Tmux 或 herdr 内部，直接使用原生 ssh
     zsh-defer alias ssh="ssh"
 else
-    # 如果不在 herdr 内部，使用 kitten ssh（利用其 terminfo 自动分发功能）
+    # 如果不在 Tmux 或 herdr 内部，使用 kitten ssh（利用其 terminfo 自动分发功能）
     zsh-defer alias ssh="kitten ssh"
 fi
 if [[ $(uname) == "Linux" ]]; then

@@ -1,6 +1,6 @@
 # Dotfiles
 
-个人开发环境配置文件集合，包含 Zsh、herdr、Neovim 等工具的配置。
+个人开发环境配置文件集合，包含 Zsh、Tmux、herdr、Neovim 等工具的配置。
 
 ## 特性
 
@@ -10,6 +10,7 @@
 
 - **Claude Code**：启动时自动切换到中文，退出后恢复英文
 - **Neovim**：Insert 模式使用中文，Normal 模式使用英文
+- **Tmux Pane 切换**：根据不同应用自动匹配输入法
 - **快捷输入**：通过鼠须管快速输入 Claude Code 命令
 
 详细配置说明请查看：[macOS 输入法自动切换解决方案](docs/macos下输入法自动切换解决方案.md)
@@ -17,7 +18,7 @@
 ### 🛠️ 工具配置
 
 - **Shell**：Zsh + [Zim](https://github.com/zimfw/zimfw) 框架
-- **终端工作区**：[herdr](https://github.com/herdr-dev/herdr)
+- **终端工作区**：Tmux + [Gruvbox 主题](https://github.com/egel/tmux-gruvbox)，以及 [herdr](https://github.com/herdr-dev/herdr)
 - **编辑器**：Neovim + [LazyVim](https://www.lazyvim.org/)
 - **输入法**：鼠须管（Squirrel）+ 自定义短语
 
@@ -27,6 +28,7 @@
 
 - **Neovim** - 现代化的 Vim 编辑器
 - **Zsh** - Shell 环境
+- **Tmux** - 终端复用器
 - **herdr** - 终端工作区管理器
 - **macism** - macOS 输入法切换工具（仅 macOS）
   ```bash
@@ -53,6 +55,16 @@
   - 自定义别名和快捷键绑定
 
 - `zimrc` - Zim 框架配置
+
+### Tmux 配置
+
+- `tmux/tmux.conf` - Tmux 主配置文件
+  - 前缀键：`Ctrl+g`
+  - Pane 切换输入法自动管理
+  - Gruvbox 主题
+  - 智能 Vim 导航集成
+- `tmux/scripts/im-switch.sh` - Pane 切换时的输入法管理脚本
+- `tmux/init.sh` - 建立主配置与辅助脚本的符号链接
 
 ### Neovim 配置
 
@@ -106,7 +118,7 @@ cd ~/dotfiles
 
 ```bash
 # macOS
-brew install neovim herdr macism
+brew install neovim tmux herdr macism
 
 # 安装 Zim 框架
 curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
@@ -118,6 +130,9 @@ curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | 
 # Zsh
 ln -sf ~/dotfiles/zshrc ~/.zshrc
 ln -sf ~/dotfiles/zimrc ~/.zimrc
+
+# Tmux（链接主配置与辅助脚本）
+~/dotfiles/tmux/init.sh
 
 # Git
 ln -sf ~/dotfiles/gitconfig ~/.gitconfig
@@ -147,11 +162,22 @@ nvim
 # 重新加载 Zsh
 source ~/.zshrc
 
+# 重新加载 Tmux（在 Tmux 会话中）
+tmux source-file ~/.tmux.conf
+
 # 重新部署鼠须管（可选）
 # 点击菜单栏鼠须管图标 → 重新部署
 ```
 
 ## 使用技巧
+
+### Tmux 快捷键
+
+- `Ctrl+g` - 前缀键
+- `Ctrl+g -` - 垂直分割
+- `Ctrl+g \` - 水平分割
+- `Ctrl+h/j/k/l` - 在 pane 间导航（兼容 Vim）
+- `Shift+Left/Right` - 切换窗口
 
 ### Zsh 别名
 
@@ -173,8 +199,8 @@ source ~/.zshrc
 如果遇到问题，请查看：
 
 - [输入法自动切换故障排查](docs/macos下输入法自动切换解决方案.md#故障排查)
-- 检查依赖工具是否正确安装：`which macism nvim herdr`
-- 查看配置文件是否正确链接：`ls -la ~/.zshrc ~/.config/herdr/config.toml`
+- 检查依赖工具是否正确安装：`which macism nvim tmux herdr`
+- 查看配置文件是否正确链接：`ls -la ~/.zshrc ~/.tmux.conf ~/.config/herdr/config.toml`
 
 ## 贡献
 
