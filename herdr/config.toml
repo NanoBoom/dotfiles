@@ -19,22 +19,26 @@ name = "gruvbox"
 sidebar_width = 20
 agent_panel_sort = "spaces"
 copy_on_select = false
-
+prompt_new_tab_name = false
 sidebar_collapsed_mode = "compact"
 
 
 [ui.sidebar.agents]
 row_gap = 1
 rows = [
-  ["state_icon", { token = "tab", bold = true, fg = "#fbf1c7", dim = false}, { token = "workspace", bold = false, fg = "#928374" }],
-  ["agent"],
+  [
+    "state_icon",
+    { token = "tab", bold = true, fg = "#fbf1c7", dim = false },
+    { token = "workspace", bold = false, fg = "#928374" },
+  ],
+  [
+    "agent",
+  ],
 ]
 
 [ui.sidebar.spaces]
 row_gap = 1
-rows = [
-  ["state_icon", "workspace"],
-]
+rows = [["state_icon", "workspace"]]
 
 [ui.toast]
 delivery = "system"
@@ -47,53 +51,52 @@ position = "top-right"
 # 前缀键 —— tmux: set -g prefix C-g
 prefix = "ctrl+g"
 
+
 # ── 全局 ────────────────────────────────────────────────
-reload_config = "prefix+r"                   # tmux: bind r source-file ~/.tmux.conf
-detach = "prefix+d"                          # tmux 默认: prefix d
-settings = "prefix+shift+s"                  # 让出 prefix+s 给 workspace 选择器
+reload_config = "prefix+r" # tmux: bind r source-file ~/.tmux.conf
+detach = "prefix+d" # tmux 默认: prefix d
+settings = "prefix+shift+s" # 让出 prefix+s 给 workspace 选择器
 
 # ── workspace（对应 tmux 的 session）───────────────────
-workspace_picker = "prefix+s"                # tmux: bind s choose-session
-new_workspace = "prefix+w"                   # tmux: bind o 新建并切换 session
-rename_workspace = "prefix+m"                # tmux 是 bind $，shift+4 与下面的 shift+1..9 冲突；借用 workspace_picker 让出的 prefix+w
-close_workspace = "prefix+ctrl+q"                   # tmux: bind C-q kill-session；直接键，会全局拦截 ctrl+q
+workspace_picker = "prefix+s" # tmux: bind s choose-session
+new_workspace = "prefix+w" # tmux: bind o 新建并切换 session
+rename_workspace = "prefix+m" # tmux 是 bind $，shift+4 与下面的 shift+1..9 冲突；借用 workspace_picker 让出的 prefix+w
+close_workspace = "prefix+ctrl+q" # tmux: bind C-q kill-session；直接键，会全局拦截 ctrl+q
 switch_workspace = "prefix+shift+1..9"
-previous_workspace = "ctrl+cmd+p"         #
-next_workspace = "ctrl+cmd+n"           #
-open_notification_target = "prefix+shift+o"  # 让出 prefix+o 给 new_workspace
+previous_workspace = "ctrl+cmd+p" #
+next_workspace = "ctrl+cmd+n" #
+open_notification_target = "prefix+shift+o" # 让出 prefix+o 给 new_workspace
 
 # ── worktree ──────────────────────────────────────────
-new_worktree = "prefix+n"              # 从当前 workspace 创建 Git worktree（Herdr 默认）
-open_worktree = "prefix+o"               # 打开当前仓库已有的 Git worktree
-remove_worktree = "ctrl+alt+k"       # 删除选中的托管 worktree（会先确认）
+new_worktree = "prefix+n" # 从当前 workspace 创建 Git worktree（Herdr 默认）
+open_worktree = "prefix+o" # 打开当前仓库已有的 Git worktree
+remove_worktree = "ctrl+alt+k" # 删除选中的托管 worktree（会先确认）
 
 # ── agent 面板导航（顺序跟随 ui.agent_panel_sort）──
-previous_agent = "cmd+p"                     # 与 cmd+p/cmd+n 的 workspace 切换对称
-next_agent = "cmd+n"                         # 跳到下一个待处理的 agent
-focus_agent = "prefix+alt+1..9"              # tab 用 prefix+1..9，workspace 用 prefix+shift+1..9
+previous_agent = "cmd+p" # 与 cmd+p/cmd+n 的 workspace 切换对称
+next_agent = "cmd+n" # 跳到下一个待处理的 agent
+focus_agent = "prefix+alt+1..9" # tab 用 prefix+1..9，workspace 用 prefix+shift+1..9
 
 # ── tab（对应 tmux 的 window）──────────────────────────
-new_tab = "prefix+c"                         # tmux: bind c new-window
-rename_tab = "prefix+comma"                  # tmux 默认: prefix , rename-window
-close_tab = "ctrl+alt+n"                 # tmux: bind k kill-window（prefix+k 是 herdr 默认的 focus_pane_up，故加 shift）
-previous_tab = "shift+left"                  # tmux: bind -n S-Left previous-window
-next_tab = "shift+right"                     # tmux: bind -n S-Right next-window
-switch_tab = "prefix+1..9"                   # tmux: prefix 1..9 select-window
+new_tab = "prefix+c" # tmux: bind c new-window
+rename_tab = "prefix+comma" # tmux 默认: prefix , rename-window
+close_tab = "ctrl+alt+n" # tmux: bind k kill-window（prefix+k 是 herdr 默认的 focus_pane_up，故加 shift）
+previous_tab = "shift+left" # tmux: bind -n S-Left previous-window
+next_tab = "shift+right" # tmux: bind -n S-Right next-window
+switch_tab = "prefix+1..9" # tmux: prefix 1..9 select-window
 
 # ── pane ──────────────────────────────────────────────
-split_horizontal = "prefix+minus"            # tmux: bind - splitw -v（上下分屏）
-split_vertical = "prefix+backslash"          # tmux: bind \ splitw -h（左右分屏）
-close_pane = "prefix+x"                      # tmux: bind x kill-pane
-zoom = "prefix+space"                        # tmux: bind -r Space resize-pane -Z
-resize_mode = "prefix+shift+r"               # tmux: prefix + C-h/j/k/l 调整大小
-edit_scrollback = "prefix+esc"               # tmux: bind Escape copy-mode
+split_horizontal = "prefix+minus" # tmux: bind - splitw -v（上下分屏）
+split_vertical = "prefix+backslash" # tmux: bind \ splitw -h（左右分屏）
+close_pane = "prefix+x" # tmux: bind x kill-pane
+zoom = "prefix+space" # tmux: bind -r Space resize-pane -Z
+# prefix+e 进入 resize mode；随后可连续用 h/j/k/l 调整，Esc/Enter 退出。
+resize_mode = "prefix+e"
+edit_scrollback = "prefix+esc" # tmux: bind Escape copy-mode
 
 # ══════════════════════════════════════════════════════
 # 以下均为自定义命令绑定，必须位于 [keys] 普通键之后
 # ══════════════════════════════════════════════════════
-
-# ── pane 焦点移动 —— herdr-splits 插件，与 Neovim 分屏无缝互跳 ──
-# 对应 tmux 的 vim-tmux-navigator（bind -n C-h/j/k/l）
 [[keys.command]]
 key = "ctrl+h"
 type = "plugin_action"
@@ -113,27 +116,6 @@ command = "herdr-splits.nav-up"
 key = "ctrl+l"
 type = "plugin_action"
 command = "herdr-splits.nav-right"
-
-# ── pane 尺寸调整 —— 同插件，无需进入 resize_mode ──
-[[keys.command]]
-key = "alt+h"
-type = "plugin_action"
-command = "herdr-splits.resize-left"
-
-[[keys.command]]
-key = "alt+j"
-type = "plugin_action"
-command = "herdr-splits.resize-down"
-
-[[keys.command]]
-key = "alt+k"
-type = "plugin_action"
-command = "herdr-splits.resize-up"
-
-[[keys.command]]
-key = "alt+l"
-type = "plugin_action"
-command = "herdr-splits.resize-right"
 
 # ── 交换 tab 顺序 —— herdr 无内置动作，脚本走 socket API 的 tab.move ──
 # tmux: bind -n M-Left  swap-window -t -1 \; select-window -t -1
