@@ -70,7 +70,7 @@ open_notification_target = "prefix+shift+o" # 让出 prefix+o 给 new_workspace
 # ── worktree ──────────────────────────────────────────
 new_worktree = "prefix+n" # 从当前 workspace 创建 Git worktree（Herdr 默认）
 open_worktree = "prefix+o" # 打开当前仓库已有的 Git worktree
-remove_worktree = "ctrl+alt+k" # 删除选中的托管 worktree（会先确认）
+remove_worktree = "prefix+u" # 删除选中的托管 worktree（会先确认）
 
 # ── agent 面板导航（顺序跟随 ui.agent_panel_sort）──
 previous_agent = "cmd+p" # 与 cmd+p/cmd+n 的 workspace 切换对称
