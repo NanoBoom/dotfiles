@@ -56,6 +56,7 @@ prefix = "ctrl+g"
 reload_config = "prefix+r" # tmux: bind r source-file ~/.tmux.conf
 detach = "prefix+d" # tmux 默认: prefix d
 settings = "prefix+shift+s" # 让出 prefix+s 给 workspace 选择器
+copy_mode = "prefix+f"
 
 # ── workspace（对应 tmux 的 session）───────────────────
 workspace_picker = "prefix+s" # tmux: bind s choose-session
@@ -75,7 +76,7 @@ remove_worktree = "prefix+u" # 删除选中的托管 worktree（会先确认）
 # ── agent 面板导航（顺序跟随 ui.agent_panel_sort）──
 previous_agent = "cmd+p" # 与 cmd+p/cmd+n 的 workspace 切换对称
 next_agent = "cmd+n" # 跳到下一个待处理的 agent
-focus_agent = "prefix+alt+1..9" # tab 用 prefix+1..9，workspace 用 prefix+shift+1..9
+focus_agent = "prefix+1..9" # tab 用 prefix+1..9，workspace 用 prefix+shift+1..9
 
 # ── tab（对应 tmux 的 window）──────────────────────────
 new_tab = "prefix+c" # tmux: bind c new-window
@@ -83,7 +84,6 @@ rename_tab = "prefix+comma" # tmux 默认: prefix , rename-window
 close_tab = "ctrl+alt+n" # tmux: bind k kill-window（prefix+k 是 herdr 默认的 focus_pane_up，故加 shift）
 previous_tab = "shift+left" # tmux: bind -n S-Left previous-window
 next_tab = "shift+right" # tmux: bind -n S-Right next-window
-switch_tab = "prefix+1..9" # tmux: prefix 1..9 select-window
 
 # ── pane ──────────────────────────────────────────────
 split_horizontal = "prefix+minus" # tmux: bind - splitw -v（上下分屏）
@@ -92,7 +92,6 @@ close_pane = "prefix+x" # tmux: bind x kill-pane
 zoom = "prefix+space" # tmux: bind -r Space resize-pane -Z
 # prefix+e 进入 resize mode；随后可连续用 h/j/k/l 调整，Esc/Enter 退出。
 resize_mode = "prefix+e"
-edit_scrollback = "prefix+esc" # tmux: bind Escape copy-mode
 
 # ══════════════════════════════════════════════════════
 # 以下均为自定义命令绑定，必须位于 [keys] 普通键之后
