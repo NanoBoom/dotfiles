@@ -171,7 +171,7 @@ zsh-defer alias icat="kitten icat"
 zsh-defer alias vim=nvim
 zsh-defer alias vi=nvim
 zsh-defer alias ss="sgpt -s"
-zsh-defer alias cc='HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890  TZ="Asia/Singapore" claude --permission-mode bypassPermissions'
+zsh-defer alias claude='HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890  TZ="Asia/Singapore" claude --permission-mode bypassPermissions'
 # 智能判断 SSH Alias
 if [[ -n "$TMUX" || -n "$HERDR_PANE_ID" ]]; then
     # 如果在 Tmux 或 herdr 内部，直接使用原生 ssh
