@@ -38,7 +38,7 @@ rows = [
 
 [ui.sidebar.spaces]
 row_gap = 1
-rows = [["state_icon", "workspace"]]
+rows = [["state_icon", "workspace"], ["branch"]] # branch 会触发后台 git 刷新，避免 worktree 缓存过期（herdr#3214）
 
 # macOS system 模式优先调用 terminal-notifier；终端聚焦时抑制活动 tab 的自动通知。
 [ui.toast]
