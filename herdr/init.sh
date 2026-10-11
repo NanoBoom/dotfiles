@@ -19,6 +19,7 @@ die() {
 }
 
 command -v herdr >/dev/null 2>&1 || die "未找到 herdr，请先安装：brew install herdr"
+command -v terminal-notifier >/dev/null 2>&1 || warn "未找到 terminal-notifier，system 通知将回退到 osascript；安装：brew install terminal-notifier"
 
 # link <本目录内的相对路径> <目标绝对路径>
 link() {

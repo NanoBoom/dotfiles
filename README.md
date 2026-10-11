@@ -91,9 +91,20 @@
 - `herdr/init.sh` - 初始化脚本：建立符号链接 + 安装 [herdr-splits](https://github.com/lmilojevicc/herdr-splits.nvim) 插件
 
 ```bash
-brew install herdr
+brew install herdr terminal-notifier
 ~/dotfiles/herdr/init.sh
 ```
+
+通知使用 `[ui.toast] delivery = "system"`。macOS 上 herdr 优先调用 `terminal-notifier`，不可用或发送失败时回退到 `osascript`。`delay_seconds = 1` 表示 agent 完成或需要输入后等待 1 秒；到期时状态必须仍然相同。终端聚焦或焦点状态未知时，活动 tab 的自动通知会被抑制；手动 `notification show` 不受这一限制。`ui.toast.herdr.position` 仅影响 herdr 内部弹窗。
+
+系统通知由附着的 herdr 客户端发送。只有后台 server 的 session 不会发送通知。在目标 session 的 herdr pane 内测试：
+
+```bash
+herdr server reload-config
+herdr notification show 'Herdr 通知测试' --body '验证 terminal-notifier' --sound none
+```
+
+从外部终端测试命名 session 时，加上 `--session <名称>`，例如 `herdr --session demo notification show 'Herdr 通知测试'`。返回 `shown: false`、`reason: "no_foreground_client"` 表示目标 session 没有附着的客户端。通知权限可用 `terminal-notifier -diagnose` 检查。
 
 插件 `herdr-splits` 提供 `Ctrl+h/j/k/l` 在 herdr pane 与 Neovim 分屏之间无缝跳转，以及 `Alt+h/j/k/l` 直接调整 pane 尺寸。其配置文件由 Neovim 端的 `setup()` 自动生成，无需纳入版本管理。
 
