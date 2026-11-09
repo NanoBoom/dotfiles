@@ -170,8 +170,8 @@ export PATH
 zsh-defer alias icat="kitten icat"
 zsh-defer alias vim=nvim
 zsh-defer alias vi=nvim
-zsh-defer alias ss="sgpt -s"
-zsh-defer alias claude='HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890  TZ="Asia/Singapore" claude --permission-mode bypassPermissions'
+zsh-defer alias codex='HTTP_PROXY=http://127.0.0.1:7890 HTTPS_PROXY=http://127.0.0.1:7890  TZ="Asia/Singapore" codex --dangerously-bypass-approvals-and-sandbox'
+
 # 智能判断 SSH Alias
 if [[ -n "$TMUX" || -n "$HERDR_PANE_ID" ]]; then
     # 如果在 Tmux 或 herdr 内部，直接使用原生 ssh
@@ -210,19 +210,5 @@ fi
 # vfox load
 eval "$(vfox activate zsh)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
-codex() {
-  export http_proxy="http://127.0.0.1:7890"
-  export https_proxy="http://127.0.0.1:7890"
-  export HTTP_PROXY="$http_proxy"
-  export HTTPS_PROXY="$https_proxy"
-
-  command codex \
-    --dangerously-bypass-approvals-and-sandbox \
-    "$@"
-}
-
 export PATH="$HOME/.local/bin:$PATH"
-
-# Pi
 export PATH="/Users/fanlz/.version-fox/cache/nodejs/v-22.20.0/nodejs-22.20.0/bin:$PATH"
